@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import type { Agent } from '@shared/types'
 
+export type ThemeMode = 'light' | 'dark'
+
+export function applyTheme(theme?: string | null): ThemeMode {
+  const next: ThemeMode = theme === 'dark' ? 'dark' : 'light'
+  document.documentElement.dataset.theme = next
+  document.documentElement.style.colorScheme = next
+  return next
+}
+
 export function cx(...parts: (string | false | null | undefined)[]): string {
   return parts.filter(Boolean).join(' ')
 }

@@ -180,6 +180,7 @@ function registerIpc(): void {
   ipcMain.handle('tea:settings:update', (_e, patch: Partial<AppSettings>) => {
     const safe: Partial<AppSettings> = {}
     if (typeof patch.userName === 'string') safe.userName = patch.userName.trim().slice(0, 40) || '旅人'
+    if (patch.theme === 'light' || patch.theme === 'dark') safe.theme = patch.theme
     if (typeof patch.onboarded === 'boolean') safe.onboarded = patch.onboarded
     if (typeof patch.autoMemory === 'boolean') safe.autoMemory = patch.autoMemory
     if (typeof patch.allowPrivateNetwork === 'boolean') safe.allowPrivateNetwork = patch.allowPrivateNetwork

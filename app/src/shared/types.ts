@@ -171,7 +171,7 @@ export interface CharacterPack {
 export interface AppSettings {
   onboarded: boolean
   userName: string
-  theme: 'dark'
+  theme: 'light' | 'dark'
   contextLimit: number
   maxContextChars: number
   autoMemory: boolean

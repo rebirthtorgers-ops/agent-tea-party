@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { applyTheme } from './utils'
 import type {
   Agent, AppSettings, BootstrapData, CharacterPack, ChatEvent, Message, ProviderConfig, Room,
   StatsOverview
@@ -50,7 +51,7 @@ interface AppState {
 const defaultSettings: AppSettings = {
   onboarded: false,
   userName: '旅人',
-  theme: 'dark',
+  theme: 'light',
   contextLimit: 32000,
   maxContextChars: 24000,
   autoMemory: true,
@@ -88,6 +89,7 @@ export const useApp = create<AppState>((set, get) => ({
     initialized = true
     try {
       const data: BootstrapData = await window.tea.bootstrap()
+      applyTheme(data.settings?.theme)
       const info = await window.tea.appInfo()
       let characters: CharacterPack[] = []
       try { characters = await window.tea.listCharacters() } catch { characters = [] }
@@ -117,6 +119,7 @@ export const useApp = create<AppState>((set, get) => ({
   refreshAll: async () => {
     try {
       const data = await window.tea.bootstrap()
+      applyTheme(data.settings?.theme)
       set({
         settings: data.settings ?? defaultSettings,
         providers: data.providers ?? [],

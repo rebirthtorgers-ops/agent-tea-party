@@ -14,6 +14,7 @@ import { RoomModal } from '../components/RoomModal'
 import { AgentEditor } from '../components/AgentEditor'
 import { formatTime, cx } from '../utils'
 import { EmptyState } from '../components/EmptyState'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 const NAV = [
   { to: '/agents', label: 'Agent 管理', icon: Users },
@@ -218,6 +219,7 @@ export function ChatPage() {
         </nav>
 
         <div className="side-foot">
+          <ThemeToggle compact />
           <div className="local-dot" /> 数据仅保存在本机
         </div>
       </aside>
@@ -238,6 +240,7 @@ export function ChatPage() {
                 </div>
               </div>
               <div className="chat-head-actions">
+                <ThemeToggle compact />
                 <button className="icon-btn" title="茶会设置" onClick={() => setRoomModal(room)}><SlidersHorizontal size={17} /></button>
                 <button className="icon-btn" title="邀请 Agent" onClick={() => setInviteOpen(true)}><UserPlus size={17} /></button>
               </div>

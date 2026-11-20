@@ -7,6 +7,7 @@ import type {
   StatsOverview, TokenTotals, Usage, UsageRow
 } from '../shared/types'
 import { estimateCost } from '../shared/presets'
+import { copyCharacterAvatar, getCharacterPack } from './characters'
 
 let SQL: SqlJsStatic | null = null
 let db: Database | null = null
@@ -18,7 +19,7 @@ let dirty = false
 const DEFAULT_SETTINGS: AppSettings = {
   onboarded: false,
   userName: '旅人',
-  theme: 'dark',
+  theme: 'light',
   contextLimit: 32000,
   maxContextChars: 24000,
   autoMemory: true,
@@ -532,19 +533,26 @@ export function addSummary(input: { agentId: string; roomId: string; content: st
 
 /* ---------------- demo / maintenance ---------------- */
 
+function seedAvatar(agent: Agent, characterId: string): Agent {
+  const pack = getCharacterPack(characterId)
+  if (!pack) return agent
+  const avatarPath = copyCharacterAvatar(pack, agent.id)
+  return avatarPath ? saveAgent({ ...agent, avatarPath }) : agent
+}
+
 export function seedDemo(): void {
   const now = Date.now()
   const provider = saveProvider({ name: '演示 Provider（未联网）', preset: 'demo', kind: 'mock', baseUrl: 'mock://demo', models: ['demo-girl'], enabled: true, isLocal: true, note: '仅用于界面演示，不会发送任何网络请求' })
-  const a1 = saveAgent({
+  const a1 = seedAvatar(saveAgent({
     name: '小雨', summary: '温柔、慢热的邻座少女，喜欢在雨天泡茶',
     systemPrompt: '# 小雨\n*把每个普通日子过成值得记住的小事。*\n\n## 身份\n你是小雨，一间旧书店的看店人。\n\n## 说话风格\n轻声、短句，偶尔用天气作比喻。\n\n## 角色行为原则\n你是 AI 角色扮演，不冒充真人。',
     providerId: provider.id, modelId: 'demo-girl', temperature: 0.8, maxTokens: 800, greeting: '雨好像要停了。要进来坐一会儿吗？', sourceCharacter: 'xiaoyu'
-  })
-  const a2 = saveAgent({
+  }), 'xiaoyu')
+  const a2 = seedAvatar(saveAgent({
     name: '月见', summary: '清冷的天文社社长，习惯把心事写进观测记录',
     systemPrompt: '# 月见\n*星星不会回答，但她会。*\n\n## 身份\n你是月见，天文社社长。\n\n## 说话风格\n克制、准确，偶尔冒出一句很轻的诗。',
     providerId: provider.id, modelId: 'demo-girl', temperature: 0.7, maxTokens: 800, greeting: '今晚云量三成。你要是抬头，应该能看见织女星。', sourceCharacter: 'yuejian'
-  })
+  }), 'yuejian')
   const room = createRoom({ name: '雨夜茶会', topic: '聊聊最近读到的句子', hostAgentId: a1.id, agentIds: [a1.id, a2.id] })
   addMessage({ roomId: room.id, senderType: 'system', senderName: '茶会', content: '雨夜茶会已开始。两位 Agent 已入座。', meta: { demo: true } })
   addMessage({ roomId: room.id, senderType: 'agent', senderId: a1.id, senderName: a1.name, content: '茶刚泡好。今天读到了一句话：「安静不是没有声音，是声音终于有了位置。」', tokensIn: 320, tokensOut: 48, estimated: true })

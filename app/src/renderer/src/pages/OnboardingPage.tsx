@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { useApp } from '../store'
 import { PersonaStudio } from '../components/PersonaStudio'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 type Stage = 'api' | 'agent'
 
@@ -125,10 +126,13 @@ export function OnboardingPage() {
           <div className="brand-mark"><Sparkles size={19} /></div>
           <div><h1>Agent 茶话会</h1><p>你的本地多 Agent 聊天工作台</p></div>
         </div>
-        <div className="steps">
-          <span className={stage === 'api' ? 'active' : 'done'}><i>{stage === 'api' ? '1' : '✓'}</i> 配置模型 API</span>
-          <em />
-          <span className={stage === 'agent' ? 'active' : ''}><i>2</i> 创建第一位 AI 娘</span>
+        <div className="onboarding-top-actions">
+          <div className="steps">
+            <span className={stage === 'api' ? 'active' : 'done'}><i>{stage === 'api' ? '1' : '✓'}</i> 配置模型 API</span>
+            <em />
+            <span className={stage === 'agent' ? 'active' : ''}><i>2</i> 创建第一位 AI 娘</span>
+          </div>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -204,10 +208,10 @@ export function OnboardingPage() {
               <div className="api-actions">
                 <button className="btn ghost" onClick={() => setStage('agent')}><SkipForward size={15} /> 暂时跳过</button>
                 <button className="btn soft" onClick={() => void useDemo()} disabled={saving || testing}><Sparkles size={15} /> 没有 Key，用演示模式</button>
-                <button className="btn primary" onClick={() => void testAndSave()} disabled={testing || saving}>
+                <button className={`btn ${saved ? 'soft' : 'primary'}`} onClick={() => void testAndSave()} disabled={testing || saving}>
                   {testing ? <Loader2 size={15} className="spin" /> : <FlaskConical size={15} />} 保存并测试
                 </button>
-                <button className="btn primary" onClick={() => setStage('agent')} disabled={!saved && !providers.length}>
+                <button className={`btn ${saved || providers.length ? 'primary' : 'ghost'}`} onClick={() => setStage('agent')} disabled={!saved && !providers.length}>
                   下一步 <ArrowRight size={15} />
                 </button>
               </div>

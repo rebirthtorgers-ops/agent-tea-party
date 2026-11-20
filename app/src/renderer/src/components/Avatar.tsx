@@ -22,12 +22,12 @@ export function Avatar({ name, path, src, size = 40, glow = false, className }: 
         width: size,
         height: size,
         fontSize: Math.max(11, size * 0.36),
-        background: url ? '#141020' : `linear-gradient(135deg, ${color}44, ${color}18)`,
-        borderColor: `${color}55`
+        background: url ? '#141020' : `linear-gradient(145deg, ${color}, ${color}b8)`,
+        borderColor: `${color}aa`
       }}
       title={name}
     >
-      {url ? <img src={url} alt={name} draggable={false} /> : <span style={{ color }}>{agentInitial(name)}</span>}
+      {url ? <img src={url} alt={name} draggable={false} /> : <span style={{ color: '#fff', textShadow: '0 1px 8px rgba(36, 18, 62, 0.45)' }}>{agentInitial(name)}</span>}
     </span>
   )
 }

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, MessagesSquare } from 'lucide-react'
+import { ThemeToggle } from './ThemeToggle'
 
 interface Props {
   title: string
@@ -20,8 +21,11 @@ export function PageShell({ title, eyebrow, subtitle, actions, children, wide = 
         <button className="back-pill" onClick={() => navigate('/')}>
           <ArrowLeft size={16} /> 回到茶会 <MessagesSquare size={15} />
         </button>
-        <div className="brand-mini">
-          <span className="brand-dot" /> Agent 茶话会
+        <div className="page-top-right">
+          <ThemeToggle />
+          <div className="brand-mini">
+            <span className="brand-dot" /> Agent 茶话会
+          </div>
         </div>
       </header>
       <main className={`page-main ${wide ? 'wide' : ''}`}>

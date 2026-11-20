@@ -3,10 +3,18 @@
 以本地设备为中心的多 Agent 聊天工作台。用户用自己的 API、自己的 Agent、自己的设备，不需要注册账号，也没有云端聊天服务器。
 
 - 正式名称：Agent 茶话会
-- 当前版本：1.1.0（另有跳过引导的开发版，见下文）
+- 当前版本：1.2.0（浅色优先的新界面；另有跳过引导的开发版，见下文）
 - 目标平台：Windows 10/11 x64（已交付）；Android 尚未适配
 - 技术栈：Electron 45 + React 19 + TypeScript + Vite 8 + electron-vite 6 + sql.js（SQLite/WASM）
 - 打包：electron-builder（NSIS 安装包 + 便携版）
+
+## 界面与主题
+
+- 浅色优先的「Aurora Glass」设计：极光渐变背景、半透明玻璃卡、柔和多层阴影、24–28px 圆角
+- 参考 Apple Liquid Glass 的层次与材质、Material Design 3 的字号/间距/状态层、小米 HyperOS 的宽松留白与大标题
+- 主字体 MiSans VF（Apache-2.0，来源与许可见 `src/renderer/src/assets/misans/README.md`）
+- 默认浅色，可在页头、聊天页或「设置 → 外观」切换深色；切换立即生效并写入本地设置
+- 同一套 CSS 变量驱动两种主题，所有页面与弹窗都有深色适配
 
 ## 已实现功能
 
@@ -89,7 +97,8 @@ I:\Agent茶话会\
 │  │        ├─ pages\           聊天、引导、Agent、社区角色、人格、Provider、统计、记忆、设置
 │  │        ├─ components\      PersonaStudio、编辑器、弹窗、Markdown 等
 │  │        ├─ store.ts         zustand 状态与聊天事件流
-│  │        └─ styles.css       深色轻二次元主题
+│  │        ├─ assets/misans/   MiSans VF 字体与许可说明
+│  │        └─ styles.css       浅色优先的 Aurora Glass 主题（含深色变量）
 │  ├─ resources\characters\     12 个本地角色包（8 社区 AI 娘 + 4 原创）
 │  ├─ build\                    应用图标
 │  ├─ scripts\
@@ -134,10 +143,10 @@ export PATH="/i/Agent茶话会/tools/nodejs:$PATH"
 npm test          # 12 个单元测试
 npm run typecheck # 渲染层 + 主进程类型检查
 npm run build     # 生产构建
-npm run smoke     # 20 项 CDP 端到端检查
+npm run smoke     # 23 项 CDP 端到端检查
 ```
 
-冒烟测试覆盖：首次启动引导、连接测试不伪造状态、演示模式、12 张角色卡、从角色包创建 Agent、头像落盘、首次茶会、发送消息、离线演示回复、Token 计量与估算标记、独立记忆、onboarded / demoMode 持久化、退出重启后 Agent 与聊天记录仍存在。
+冒烟测试覆盖：首次启动引导、默认浅色、主题切换并持久化、连接测试不伪造状态、演示模式、12 张角色卡、从角色包创建 Agent、头像落盘、首次茶会、发送消息、离线演示回复、Token 计量与估算标记、独立记忆、onboarded / demoMode 持久化、退出重启后 Agent 与聊天记录仍存在。
 
 测试会在 `.smoke/` 下使用独立数据目录，不会污染真实用户数据。
 
@@ -152,8 +161,8 @@ npm run dist
 
 产物输出到 `I:\Agent茶话会\release\`：
 
-- `Agent-Tea-Party-Setup-1.1.0.exe`：NSIS 安装包，可选安装目录，创建桌面/开始菜单快捷方式
-- `Agent-Tea-Party-Portable-1.1.0.exe`：便携版
+- `Agent-Tea-Party-Setup-1.2.0.exe`：NSIS 安装包，可选安装目录，创建桌面/开始菜单快捷方式
+- `Agent-Tea-Party-Portable-1.2.0.exe`：便携版
 - `win-unpacked`：解包目录，可直接运行
 
 开发版（跳过首次引导、自动带入演示茶会）：
@@ -162,7 +171,7 @@ npm run dist
 npm run dist:dev
 ```
 
-产物为 `I:\Agent茶话会\release-dev\Agent-Tea-Party-Dev-1.1.0.exe`，使用独立数据目录 `AgentTeaPartyDevData`。源码调试时也可以：
+产物为 `I:\Agent茶话会\release-dev\Agent-Tea-Party-Dev-1.2.0.exe`，使用独立数据目录 `AgentTeaPartyDevData`。源码调试时也可以：
 
 ```bash
 TEA_DEV_SKIP_ONBOARDING=1 npm run dev

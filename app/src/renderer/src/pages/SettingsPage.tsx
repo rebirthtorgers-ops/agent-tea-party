@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Database, Download, FolderOpen, Loader2, RotateCcw, Save, ShieldCheck, Upload, UserRound } from 'lucide-react'
+import { ArrowRight, Check, Database, Download, FolderOpen, Loader2, Palette, RotateCcw, Save, ShieldCheck, Upload, UserRound } from 'lucide-react'
 import type { AppSettings } from '@shared/types'
 import { useApp } from '../store'
 import { PageShell } from '../components/PageShell'
 import { Modal } from '../components/Modal'
+import { applyTheme, cx } from '../utils'
 
 export function SettingsPage() {
   const settings = useApp((s) => s.settings)
@@ -32,6 +33,7 @@ export function SettingsPage() {
     try {
       await saveSettings({
         userName: form.userName.trim() || '旅人',
+        theme: form.theme,
         autoMemory: form.autoMemory,
         demoMode: form.demoMode,
         allowPrivateNetwork: form.allowPrivateNetwork,
@@ -40,6 +42,13 @@ export function SettingsPage() {
       })
       toast('设置已保存在本地', 'success')
     } finally { setSaving(false) }
+  }
+
+  async function chooseTheme(theme: 'light' | 'dark') {
+    patch('theme', theme)
+    applyTheme(theme)
+    await saveSettings({ theme })
+    toast(theme === 'light' ? '已切换到浅色模式' : '已切换到深色模式', 'success')
   }
 
   async function exportBackup() {
@@ -99,6 +108,26 @@ export function SettingsPage() {
             <button className={`switch ${form.demoMode ? 'on' : ''}`} onClick={() => patch('demoMode', !form.demoMode)}><span /></button>
           </label>
           <div className="notice soft"><p>演示模式只适合先体验界面与流程。接入真实模型请关闭它，并在「模型与 API」里配置 Provider。</p></div>
+        </section>
+
+        <section className="settings-card span-two appearance-card">
+          <header><span className="settings-icon"><Palette size={17} /></span><div><h3>外观</h3><p>默认浅色，也可以换成深色。切换会立即生效，并跟随这台设备保存</p></div></header>
+          <div className="theme-choice-grid">
+            <button type="button" className={cx('theme-choice', form.theme === 'light' && 'active')} onClick={() => void chooseTheme('light')}>
+              <span className="theme-preview light-preview" aria-hidden>
+                <i className="preview-side" /><i className="preview-main" /><i className="preview-rail" />
+              </span>
+              <span className="theme-choice-body"><strong>浅色 · 晨光</strong><small>暖白玻璃与柔光，适合白天使用</small></span>
+              {form.theme === 'light' ? <span className="theme-check"><Check size={14} /></span> : null}
+            </button>
+            <button type="button" className={cx('theme-choice', form.theme === 'dark' && 'active')} onClick={() => void chooseTheme('dark')}>
+              <span className="theme-preview dark-preview" aria-hidden>
+                <i className="preview-side" /><i className="preview-main" /><i className="preview-rail" />
+              </span>
+              <span className="theme-choice-body"><strong>深色 · 夜茶</strong><small>低亮深紫与霓虹高光，适合夜里聊天</small></span>
+              {form.theme === 'dark' ? <span className="theme-check"><Check size={14} /></span> : null}
+            </button>
+          </div>
         </section>
 
         <section className="settings-card span-two">

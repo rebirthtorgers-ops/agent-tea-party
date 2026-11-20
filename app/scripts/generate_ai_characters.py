@@ -149,6 +149,22 @@ PALETTES = {
     iris=(118,215,255), iris2=(118,215,255), cloth=(32,38,78), cloth_dark=(12,14,30), cloth_light=(255,244,248), brow=(88,92,150),
     blush=(255,150,180), accent=(255,204,224), accent_dark=(180,120,150), gold=(255,226,160), style='ponytail', ears='none',
     motif='bao', headband=False, wings=False, horns=False),
+ 'xiaoyu': dict(bg=((24,30,48),(7,9,16)), hair=((44,48,78),(108,120,160)), skin=(255,232,221), skin_shadow=(232,193,184),
+    iris=(126,200,255), iris2=(126,200,255), cloth=(38,46,72), cloth_dark=(16,20,34), cloth_light=(232,238,248), brow=(44,50,76),
+    blush=(255,138,160), accent=(158,208,255), accent_dark=(74,120,180), gold=(255,221,151), style='long', ears='none',
+    motif='fourstar', headband=False, wings=False, horns=False, book=True),
+ 'yuejian': dict(bg=((20,22,42),(6,7,14)), hair=((48,42,72),(128,112,170)), skin=(255,234,226), skin_shadow=(232,198,194),
+    iris=(186,160,255), iris2=(186,160,255), cloth=(30,30,52), cloth_dark=(10,10,20), cloth_light=(238,234,248), brow=(58,50,86),
+    blush=(250,150,190), accent=(178,150,255), accent_dark=(94,78,150), gold=(240,230,255), style='long', ears='none',
+    motif='moon', headband=False, wings=False, horns=False),
+ 'lingdang': dict(bg=((44,24,24),(12,7,8)), hair=((132,52,54),(206,104,92)), skin=(255,234,222), skin_shadow=(234,196,188),
+    iris=(255,190,110), iris2=(255,190,110), cloth=(60,30,36), cloth_dark=(20,9,12), cloth_light=(255,240,226), brow=(86,34,38),
+    blush=(255,144,148), accent=(255,186,104), accent_dark=(170,90,50), gold=(255,222,160), style='ponytail', ears='none',
+    motif='starburst', headband=False, wings=False, horns=False),
+ 'aya': dict(bg=((16,32,36),(5,9,11)), hair=((52,74,80),(120,160,164)), skin=(255,232,220), skin_shadow=(230,194,184),
+    iris=(130,235,235), iris2=(130,235,235), cloth=(24,40,44), cloth_dark=(8,14,16), cloth_light=(226,240,238), brow=(34,54,58),
+    blush=(240,150,150), accent=(120,230,220), accent_dark=(46,130,126), gold=(240,220,170), style='short', ears='none',
+    motif='hex', headband=False, wings=False, horns=False),
 }
 
 def avatar(path, p):

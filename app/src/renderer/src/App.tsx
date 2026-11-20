@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AlertTriangle, Loader2, RotateCcw } from 'lucide-react'
 import { useApp } from './store'
+import { applyTheme } from './utils'
 import { Toasts } from './components/Toasts'
 import { ChatPage } from './pages/ChatPage'
 import { OnboardingPage } from './pages/OnboardingPage'
@@ -25,9 +26,11 @@ function OnboardingGate({ children }: { children: React.ReactNode }) {
 export default function App() {
   const ready = useApp((s) => s.ready)
   const bootError = useApp((s) => s.bootError)
+  const theme = useApp((s) => s.settings.theme)
   const init = useApp((s) => s.init)
 
   useEffect(() => { void init() }, [init])
+  useEffect(() => { applyTheme(theme) }, [theme])
 
   if (!ready) {
     return (

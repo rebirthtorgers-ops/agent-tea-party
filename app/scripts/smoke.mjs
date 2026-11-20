@@ -155,6 +155,17 @@ async function main() {
   assert('first launch shows onboarding', heading.includes('先接入你自己的模型'))
   assert('no fabricated connection state', heading.includes('连接测试会真实请求你填写的地址'))
 
+  const initialTheme = await evaluate('document.documentElement.dataset.theme')
+  assert('first launch starts in light theme', initialTheme === 'light', String(initialTheme))
+  await clickButton('深色模式')
+  await waitFor('document.documentElement.dataset.theme === "dark"', 'dark theme applied')
+  await waitFor('window.tea.bootstrap().then((data) => data.settings.theme === "dark")', 'dark theme saved')
+  ok('theme toggles to dark and persists')
+  await clickButton('浅色模式')
+  await waitFor('document.documentElement.dataset.theme === "light"', 'light theme restored')
+  await waitFor('window.tea.bootstrap().then((data) => data.settings.theme === "light")', 'light theme saved')
+  ok('theme toggles back to light and persists')
+
   await clickButton('没有 Key，用演示模式')
   await waitFor('document.body.innerText.includes("社区娘化 AI")', 'character gallery after demo provider')
   ok('demo provider setup advances to character creation')
