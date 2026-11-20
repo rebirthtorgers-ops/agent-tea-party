@@ -3,6 +3,7 @@ app/out/
 app/.smoke/
 app/*.tsbuildinfo
 release/
+release-dev/
 tools/
 *.log
 .DS_Store

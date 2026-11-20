@@ -15,14 +15,21 @@ import { copyCharacterAvatar, getCharacterPack, importAvatarFile, listCharacterP
 import { startChat, stopChat, pauseChat, stopAllChats } from './chat'
 
 const isDev = !app.isPackaged
+
+let devBuild = process.env.TEA_DEV_SKIP_ONBOARDING === '1' || process.argv.includes('--skip-onboarding')
+try {
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')) as { teaDevBuild?: boolean }
+  devBuild = devBuild || pkg.teaDevBuild === true
+} catch { /* package.json is not essential for boot */ }
+
 const portableDir = process.env.PORTABLE_EXECUTABLE_DIR
 if (portableDir) {
-  app.setPath('userData', path.join(portableDir, 'AgentTeaPartyData'))
+  app.setPath('userData', path.join(portableDir, devBuild ? 'AgentTeaPartyDevData' : 'AgentTeaPartyData'))
 }
 if (process.env.TEA_USER_DATA) {
   app.setPath('userData', path.resolve(process.env.TEA_USER_DATA))
 }
-app.setName('Agent Tea Party')
+app.setName(devBuild ? 'Agent Tea Party Dev' : 'Agent Tea Party')
 
 let mainWindow: BrowserWindow | null = null
 
@@ -36,7 +43,7 @@ function createWindow(): void {
     minWidth: 1120,
     minHeight: 720,
     show: false,
-    title: 'Agent 茶话会',
+    title: devBuild ? 'Agent 茶话会 · 开发版' : 'Agent 茶话会',
     backgroundColor: '#0b0912',
     autoHideMenuBar: true,
     webPreferences: {
@@ -167,7 +174,7 @@ function providerInputError(input: ProviderInput): string | null {
 function registerIpc(): void {
   ipcMain.handle('tea:bootstrap', () => bootstrapData())
   ipcMain.handle('tea:app-info', () => ({
-    version: app.getVersion(), dataDir: db.getDataDir(), packaged: app.isPackaged, platform: process.platform
+    version: app.getVersion(), dataDir: db.getDataDir(), packaged: app.isPackaged, platform: process.platform, devBuild
   }))
 
   ipcMain.handle('tea:settings:update', (_e, patch: Partial<AppSettings>) => {
@@ -531,6 +538,10 @@ if (!gotLock) {
   app.whenReady().then(async () => {
     db.initDatabase(app.getPath('userData'))
     await db.openDatabase()
+    if (devBuild) {
+      if (!db.listAgents().length) db.seedDemo()
+      else if (!db.getSettings().onboarded) db.saveSettings({ onboarded: true })
+    }
     if (process.env.TEA_SMOKE_SEED === '1' && !db.listAgents().length) db.seedDemo()
     registerIpc()
     createWindow()

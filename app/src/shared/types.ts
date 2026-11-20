@@ -153,6 +153,9 @@ export interface CharacterManifest {
   defaultModel?: string
   license?: string
   source?: string
+  aiModel?: string
+  collection?: string
+  disclaimer?: string
   avatar: string
   personalityFile: string
 }

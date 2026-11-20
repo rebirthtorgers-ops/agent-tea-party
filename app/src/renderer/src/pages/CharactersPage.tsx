@@ -8,7 +8,7 @@ export function CharactersPage() {
     <PageShell
       title="社区娘化 AI"
       eyebrow="LOCAL CHARACTER PRESETS"
-      subtitle="内置角色包只是本地人格模板，不是模型供应商，也不自带 API Key。创建后头像会复制到你的应用数据目录。"
+      subtitle="本地人格模板，参考公开社区设定重绘。不含 API Key，头像保存在本机。"
       wide
     >
       <PersonaStudio initialMode="characters" onCreated={() => navigate('/agents')} onConfigProvider={() => navigate('/providers')} />

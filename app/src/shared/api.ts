@@ -45,7 +45,7 @@ export interface CreateFromCharacterInput {
 export interface TeaApi {
   bootstrap(): Promise<BootstrapData>
   updateSettings(patch: Partial<AppSettings>): Promise<AppSettings>
-  appInfo(): Promise<{ version: string; dataDir: string; packaged: boolean; platform: string }>
+  appInfo(): Promise<{ version: string; dataDir: string; packaged: boolean; platform: string; devBuild: boolean }>
 
   listProviders(): Promise<ProviderConfig[]>
   saveProvider(input: ProviderInput, apiKey?: string): Promise<Result<ProviderConfig>>

@@ -249,6 +249,24 @@ export function PersonaStudio({ onCreated, onConfigProvider, initialMode = 'char
     )
   }
 
+  const communityCharacters = characters.filter((pack) => pack.manifest.collection)
+  const originalCharacters = characters.filter((pack) => !pack.manifest.collection)
+
+  const renderCharacterCard = (pack: CharacterPack) => (
+    <article key={pack.manifest.id} className="character-card" onClick={() => openCharacter(pack)}>
+      <div className="character-cover">
+        <img src={pack.avatarUrl} alt={pack.manifest.name} draggable={false} />
+        <span className="badge">{pack.manifest.aiModel ?? `v${pack.manifest.version}`}</span>
+      </div>
+      <div className="character-body">
+        <h4>{pack.manifest.name}</h4>
+        <p>{pack.manifest.description}</p>
+        <div className="tag-row">{(pack.manifest.tags ?? []).slice(0, 4).map((t) => <span key={t} className="tag">{t}</span>)}</div>
+        <button className="btn soft full">查看人格 <ChevronRight size={14} /></button>
+      </div>
+    </article>
+  )
+
   return (
     <div className="persona-studio">
       <div className="mode-tabs">
@@ -316,28 +334,27 @@ export function PersonaStudio({ onCreated, onConfigProvider, initialMode = 'char
       ) : null}
 
       {!preview && mode === 'characters' ? (
-        <section>
-          <div className="section-line">
-            <h3>本地角色包 · {characters.length} 位</h3>
-            <span className="hint">原创预设，不含 API Key；创建时复制头像到本地数据目录</span>
-          </div>
-          <div className="character-grid">
-            {characters.map((pack) => (
-              <article key={pack.manifest.id} className="character-card" onClick={() => openCharacter(pack)}>
-                <div className="character-cover" style={{ backgroundImage: `url(${pack.avatarUrl})` }}>
-                  <span className="badge">v{pack.manifest.version}</span>
-                </div>
-                <div className="character-body">
-                  <h4>{pack.manifest.name}</h4>
-                  <p>{pack.manifest.description}</p>
-                  <div className="tag-row">{(pack.manifest.tags ?? []).slice(0, 4).map((t) => <span key={t} className="tag">{t}</span>)}</div>
-                  <button className="btn soft full">查看人格 <ChevronRight size={14} /></button>
-                </div>
-              </article>
-            ))}
-            {!characters.length ? <p className="hint">没有找到角色包，请检查 resources/characters</p> : null}
-          </div>
-        </section>
+        <div className="character-sections">
+          {communityCharacters.length ? (
+            <section>
+              <div className="section-line">
+                <h3>社区 AI 娘 · {communityCharacters.length} 位</h3>
+                <span className="hint">社区二创设定重绘，非官方；不含 API Key</span>
+              </div>
+              <div className="character-grid">{communityCharacters.map(renderCharacterCard)}</div>
+            </section>
+          ) : null}
+          {originalCharacters.length ? (
+            <section>
+              <div className="section-line">
+                <h3>原创角色 · {originalCharacters.length} 位</h3>
+                <span className="hint">Agent 茶话会原创预设</span>
+              </div>
+              <div className="character-grid">{originalCharacters.map(renderCharacterCard)}</div>
+            </section>
+          ) : null}
+          {!characters.length ? <p className="hint">没有找到角色包，请检查 resources/characters</p> : null}
+        </div>
       ) : null}
 
       {!preview && mode === 'questions' ? (
@@ -446,7 +463,7 @@ export function PersonaStudio({ onCreated, onConfigProvider, initialMode = 'char
       {detail ? (
         <Modal
           title={`${detail.manifest.name} · 角色档案`}
-          subtitle={`${detail.manifest.author} · v${detail.manifest.version} · ${detail.manifest.license ?? '授权未注明'}`}
+          subtitle={`${detail.manifest.aiModel ? detail.manifest.aiModel + ' · ' : ''}${detail.manifest.author} · v${detail.manifest.version} · ${detail.manifest.license ?? '授权未注明'}`}
           onClose={() => setDetail(null)}
           width={760}
           footer={
@@ -464,6 +481,7 @@ export function PersonaStudio({ onCreated, onConfigProvider, initialMode = 'char
               <p>{detail.manifest.description}</p>
               <div className="tag-row">{(detail.manifest.tags ?? []).map((t) => <span key={t} className="tag">{t}</span>)}</div>
               {detail.manifest.source ? <p className="hint">来源：{detail.manifest.source}</p> : null}
+              {detail.manifest.disclaimer ? <p className="hint">{detail.manifest.disclaimer}</p> : null}
             </div>
           </div>
           <div className="model-strip vertical">

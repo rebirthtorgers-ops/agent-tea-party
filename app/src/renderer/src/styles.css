@@ -528,11 +528,13 @@ input[type="number"] { -moz-appearance: textfield; }
 .preset-chip small { color: var(--green); font-size: 8.5px; }
 
 /* ---------- character gallery ---------- */
+.character-sections { display: flex; flex-direction: column; gap: 28px; }
 .character-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
 .character-card { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: rgba(17,20,37,.7); cursor: pointer; transition: .18s; }
 .character-card:hover { transform: translateY(-3px); border-color: rgba(167,139,250,.35); box-shadow: 0 24px 44px -34px #000; }
-.character-cover { height: 190px; background-size: cover; background-position: center 30%; position: relative; }
-.character-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,15,29,.9), transparent 55%); }
+.character-cover { height: 190px; position: relative; background: #0b0d18; }
+.character-cover img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
+.character-cover::after { display: none; }
 .character-cover .badge { position: absolute; top: 10px; right: 10px; z-index: 1; }
 .character-body { padding: 13px 14px 14px; display: flex; flex-direction: column; gap: 7px; }
 .character-body h4 { font-size: 15px; font-weight: 650; }
