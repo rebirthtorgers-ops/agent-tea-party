@@ -3,18 +3,19 @@
 以本地设备为中心的多 Agent 聊天工作台。用户用自己的 API、自己的 Agent、自己的设备，不需要注册账号，也没有云端聊天服务器。
 
 - 正式名称：Agent 茶话会
-- 当前版本：1.2.0（浅色优先的新界面；另有跳过引导的开发版，见下文）
+- 当前版本：1.3.0（按设计规范重构的三层材质界面；另有跳过引导的开发版，见下文）
 - 目标平台：Windows 10/11 x64（已交付）；Android 尚未适配
 - 技术栈：Electron 45 + React 19 + TypeScript + Vite 8 + electron-vite 6 + sql.js（SQLite/WASM）
 - 打包：electron-builder（NSIS 安装包 + 便携版）
 
 ## 界面与主题
 
-- 浅色优先的「Aurora Glass」设计：极光渐变背景、半透明玻璃卡、柔和多层阴影、24–28px 圆角
+- 浅色优先的「Aurora Glass」设计，但按材质分层：内容层用不透明 surface，功能层（侧栏、顶栏、输入区）用克制的玻璃，浮层（弹窗、toast）用玻璃 + 阴影
 - 参考 Apple Liquid Glass 的层次与材质、Material Design 3 的字号/间距/状态层、小米 HyperOS 的宽松留白与大标题
 - 主字体 MiSans VF（Apache-2.0，来源与许可见 `src/renderer/src/assets/misans/README.md`）
 - 默认浅色，可在页头、聊天页或「设置 → 外观」切换深色；切换立即生效并写入本地设置
-- 同一套 CSS 变量驱动两种主题，所有页面与弹窗都有深色适配
+- 同一套 CSS 变量驱动两种主题；已补 `prefers-reduced-transparency`、`prefers-contrast`、`forced-colors` 回退
+- 设计依据、规范数值与审计记录见 [`DESIGN-RESEARCH.md`](DESIGN-RESEARCH.md)
 
 ## 已实现功能
 
@@ -161,8 +162,8 @@ npm run dist
 
 产物输出到 `I:\Agent茶话会\release\`：
 
-- `Agent-Tea-Party-Setup-1.2.0.exe`：NSIS 安装包，可选安装目录，创建桌面/开始菜单快捷方式
-- `Agent-Tea-Party-Portable-1.2.0.exe`：便携版
+- `Agent-Tea-Party-Setup-1.3.0.exe`：NSIS 安装包，可选安装目录，创建桌面/开始菜单快捷方式
+- `Agent-Tea-Party-Portable-1.3.0.exe`：便携版
 - `win-unpacked`：解包目录，可直接运行
 
 开发版（跳过首次引导、自动带入演示茶会）：
@@ -171,7 +172,7 @@ npm run dist
 npm run dist:dev
 ```
 
-产物为 `I:\Agent茶话会\release-dev\Agent-Tea-Party-Dev-1.2.0.exe`，使用独立数据目录 `AgentTeaPartyDevData`。源码调试时也可以：
+产物为 `I:\Agent茶话会\release-dev\Agent-Tea-Party-Dev-1.3.0.exe`，使用独立数据目录 `AgentTeaPartyDevData`。源码调试时也可以：
 
 ```bash
 TEA_DEV_SKIP_ONBOARDING=1 npm run dev
