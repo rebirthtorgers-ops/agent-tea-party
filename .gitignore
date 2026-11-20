@@ -7,3 +7,5 @@ release-dev/
 tools/
 *.log
 .DS_Store
+.github-token
+.secrets/
